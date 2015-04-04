@@ -18,12 +18,14 @@ defmodule OAuth2.AccessToken do
   ]
 
   def new(response, strategy, _opts \\ []) do
+    response=Vesal.parse_string_to_data(response)
+    std=response
     {std, other} = Dict.split(response, @standard)
 
     struct __MODULE__, [
       access_token:  std["access_token"],
       refresh_token: std["refresh_token"],
-      expires_at:    std["expires_in"] |> expires_at,
+      expires_at:    (std["expires_in"] || std["expires"])|> expires_at,
       token_type:    response["token_type"] |> normalize_token_type,
       other_params:  other,
       strategy:      strategy]

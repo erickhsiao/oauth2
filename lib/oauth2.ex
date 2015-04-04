@@ -40,13 +40,15 @@ defmodule OAuth2 do
   def get_token(%{token_method: :post} = strategy, params, opts) do
     {headers, body} = Map.pop(params, :headers, [])
     case Request.post(token_url(strategy), body, post_headers(headers), opts) do
-      {:ok, response}  -> {:ok, AccessToken.new(response.body, strategy, opts)}
+      {:ok, response}  -> 
+        {:ok, AccessToken.new(response.body, strategy, opts)}
       {:error, reason} -> {:error, %Error{reason: reason}}
     end
   end
   def get_token(strategy, params, opts) do
     case Request.get(token_url(strategy, params), opts) do
-      {:ok, response}  -> {:ok, AccessToken.new(response.body, strategy, opts)}
+      {:ok, response}  -> 
+        {:ok, AccessToken.new(response.body, strategy, opts)}
       {:error, reason} -> {:error, %Error{reason: reason}}
     end
   end
